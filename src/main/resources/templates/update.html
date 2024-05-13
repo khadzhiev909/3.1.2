@@ -89,6 +89,10 @@
         <input type="text" th:field="*{surname}" id="surname">
         <label for="sex">Sex</label>
         <input type="text" th:field="*{sex}" id="sex">
+
+        <label for="password">Password</label>
+        <input type="text" th:field="*{password}" id="password">
+
         <label>Roles:</label>
         <div th:each="role : ${allRoles}">
           <input type="checkbox" th:id="'role-' + ${role.id}" th:name="'roles'" th:value="${role.id}" th:checked="${user.roles.contains(role)}">
