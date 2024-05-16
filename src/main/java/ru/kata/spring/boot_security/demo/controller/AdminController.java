@@ -1,12 +1,13 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.MyUserDetails;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -27,6 +28,18 @@ public class AdminController {
     public String getAll(Model model) {
         List<User> users = userService.getAll();
         model.addAttribute("allUsers", users);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUserDetails user = (MyUserDetails) authentication.getPrincipal();
+
+        Set<Role> roles = user.getUser().getRoles();
+        StringBuilder rolesString = new StringBuilder();
+        for (Role role : roles) {
+            rolesString.append(role.getRole().substring(5)).append(" ");
+        }
+        model.addAttribute("rolesString", rolesString.toString());
+        model.addAttribute("user", user.getUser());
+
         return "admin";
     }
 
@@ -36,20 +49,28 @@ public class AdminController {
 //        model.addAttribute("user", userService.findById(id));
 //        return "update";
 //    }
-    @GetMapping("/admin/update")
-    public String updateNewForm(Model model, @RequestParam("id") int id) {
-        User user = userService.findById(id);
-        List<Role> allRoles = userService.getAllRoles();
-        model.addAttribute("user", user);
-        model.addAttribute("allRoles", allRoles);
-        return "update";
+//    @GetMapping("/admin/update")
+//    public String updateNewForm(Model model, @RequestParam("id") int id) {
+//        User user = userService.findById(id);
+//        List<Role> allRoles = userService.getAllRoles();
+//        model.addAttribute("user", user);
+//        model.addAttribute("allRoles", allRoles);
+//        return "admin";
+//    }
+
+    @PostMapping("/admin/update")
+    public ResponseEntity<String> update(@RequestBody User user) {
+        // обновление пользователя на основе полученных данных
+        userService.update(user);
+        return ResponseEntity.ok("User updated successfully");
     }
 
-    @PatchMapping("/admin/update")
-    public String update(@RequestParam("id") int id, @ModelAttribute("user") User user) {
-        userService.update(id, user);
-        return "redirect:/admin";
-    }
+//    @PostMapping("/admin/update/{id}")
+//    public String update(@PathVariable("id") int id, @RequestBody User user) {
+//        userService.update(id, user);
+//        return "redirect:/admin";
+//    }
+
 
 
     @GetMapping("/admin/delete")

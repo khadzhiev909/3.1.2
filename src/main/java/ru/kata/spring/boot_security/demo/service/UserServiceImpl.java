@@ -38,18 +38,27 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         userRepo.save(user);
     }
+    @Override
+    @Transactional
+    public User save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleRepo.findRoleByRole("ROLE_ADMIN"));
+        user.setRoles(roles);
+        return userRepo.save(user);
+    }
 
     @Override
     @Transactional
-    public void update(int id, User user) {
-        User existingUser = userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+    public User update(User user) {
+        User existingUser = userRepo.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + user.getId()));
         existingUser.setUsername(user.getUsername());
         existingUser.setSurname(user.getSurname());
         existingUser.setSex(user.getSex());
         existingUser.setRoles(user.getRoles());
         existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        userRepo.save(existingUser);
+        return userRepo.save(existingUser);
     }
 
     @Override

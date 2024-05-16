@@ -3,96 +3,409 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Management</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      color: #343a40;
-      margin: 0;
-      padding: 0;
-    }
-    .container-fluid {
-      padding-top: 50px;
-      background-color: #f8f9fa;
-    }
-    .container {
-      max-width: 800px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      border-radius: 10px;
-      padding: 20px;
-      background-color: #fff;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 40px;
-      color: #007bff;
-    }
-    .table-responsive {
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      background-color: #fff;
-    }
-    .table-responsive thead {
-      background-color: #007bff;
-      color: white;
-    }
-    .table-responsive th, .table-responsive td {
-      text-align: center;
-      vertical-align: middle;
-    }
-    .btn-add {
-      background-color: #28a745;
-      border: none;
-      margin-top: 20px;
-      display: block;
-      width: 100%;
-    }
-    .btn-add:hover {
-      background-color: #218838;
-    }
-    .btn-action {
-      margin-right: 5px;
-    }
-    .btn-action:last-child {
-      margin-right: 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        html,
+        body,
+        .container-fluid,
+        .row,
+        .col-1,
+        .col-11 {
+            height: 100%;
+        }
+
+        .col-2 {
+            background-color: white;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .btn-user {
+            width: 100%;
+            margin: 0;
+        }
+
+        .header {
+            padding: 10px;
+            background-color: #343a40;
+            color: white;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: #f4f4f4;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .col-2 a {
+            text-decoration: none; /* Убираем подчеркивание у ссылок */
+
+        }
+
+        .user-class {
+            text-decoration: none;
+            color: white;
+            background-color: blue;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+
+    </style>
+
 </head>
 <body>
-<div class="container-fluid">
-  <button class="btn btn-lg btn-success" onclick="window.location.href='/'">LOGOUT</button>
-  <div class="container">
-    <h1>User Management</h1>
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Surname</th>
-          <th>Sex</th>
-          <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="user: ${allUsers}">
-          <td th:text="${user.getUsername()}"></td>
-          <td th:text="${user.getSurname()}"></td>
-          <td th:text="${user.getSex()}"></td>
-          <td>
-            <a class="btn btn-primary btn-action" th:href="@{/admin/update(id=${user.getId()})}">Update</a>
-            <a class="btn btn-danger btn-action" th:href="@{/admin/delete(id=${user.getId()})}">delete</a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+
+<div id="wrapper">
+    <div class="header">
+        <span style="font-weight: bold;" th:text="${user.username}"></span>
+        <span th:text="${'with role: ' + rolesString}"></span>
+
+        <a style="float: right;" onclick="window.location.href='/'">LOGOUT</a>
     </div>
-    <button class="btn btn-lg btn-success btn-add" onclick="window.location.href='admin/save'">Add User</button>
-  </div>
 </div>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2">
+            <div>
+                <a class="user-class" href="/user">User</a>
+            </div>
+            <div>
+                <a href="/admin">Admin</a>
+            </div>
+        </div>
+
+        <div class="col">
+            <h1>Admin panel</h1>
+            <div class="card text-center">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">User table</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">New User</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+
+                    <div class="card tab-content" id="all-users">
+                        <div class="card-header" style="font-weight: bold;">
+                            All users
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Sex</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="user: ${allUsers}">
+                                    <td th:text="${user.id}"></td>
+                                    <td th:text="${user.username}"></td>
+                                    <td th:text="${user.surname}"></td>
+                                    <td th:text="${user.sex}"></td>
+                                    <td th:text="${rolesString}"></td>
+                                    <td>
+                                        <!--                <a class="btn btn-primary btn-action" th:href="@{/admin/update(id=${user.getId()})}">edit</a>-->
+                                        <!--               TODO: Настроить так, чтобы при нажатии открывалось модальное окно для дальнейшего редактирования-->
+
+                                        <!-- Button trigger modal -->
+
+                                        <button
+                                                id="edit-user"
+                                                type="button"
+                                                class="btn btn-primary"
+                                                data-toggle="modal"
+                                                data-target="#userEditModal"
+                                                th:data-userId="${user.id}"
+                                                >
+<!--                                            th:href="@{/admin/update(id=${user.getId()})}"-->
+                                            edit
+                                        </button>
+                                    </td>
+
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="userEditModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="userEditDialogLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="userEditDialogLabel">Edit</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="editForm">
+                                                        <input type="hidden" id="user-id">
+                                                        <div class="form-group">
+                                                            <div class="input-row">
+                                                                <label for="id">ID</label>
+                                                                <input type="text" class="form-control" id="id" disabled>
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="name">Name</label>
+                                                                <input type="text" class="form-control" id="name">
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="surname">Surname</label>
+                                                                <input type="text" class="form-control" id="surname">
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="sex">Sex</label>
+                                                                <input type="text" class="form-control" id="sex">
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="password">password</label>
+                                                                <input type="text" class="form-control" id="password">
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="inputGroupSelect02">Role</label>
+                                                                <select class="form-select" id="inputGroupSelect02">
+                                                                    <option value="1">USER</option>
+                                                                    <option value="2">ADMIN</option>
+                                                                </select>
+                                                            </div>
+
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <input type="button" class="btn btn-primary" value="Edit" id="edit-form">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <td>
+                                        <button
+                                                id="delete-user"
+                                                type="button"
+                                                class="btn btn-danger"
+                                                data-toggle="modal"
+                                                data-target="#userDeleteModal"
+                                                th:data-userId="${user.id}"
+                                        >delete</button>
+                                    </td>
+                                        <!--MODAL-->
+                                    <div class="modal fade" id="userDeleteModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="userDeleteDialogLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="userDeleteDialogLabel">Edit</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <!-- Форма для удаления, -->
+                                                <div class="modal-body">
+                                                    <form id="delete-form">
+                                                        <input type="hidden" id="user-id1">
+                                                        <div class="form-group">
+                                                            <div class="input-row">
+                                                                <label for="delete-name">Name</label>
+                                                                <input type="text" class="form-control" id="delete-name" disabled>
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="delete-surname">Surname</label>
+                                                                <input type="text" class="form-control" id="delete-surname" disabled>
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="delete-sex">Sex</label>
+                                                                <input type="text" class="form-control" id="delete-sex" disabled>
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="delete-password">password</label>
+                                                                <input type="text" class="form-control" id="delete-password" disabled>
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="inputGroupSelect02">Role</label>
+                                                                <input type="text" class="form-control" id="delete-role" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <a class="btn btn-danger btn-action" th:href="@{/admin/delete(id=${user.getId()})}" th:method="DELETE">Delete</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script>
+    //FORM for editing
+    $('#userEditModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget)
+        let userId = button.data('userid')
+
+        if (userId) {
+            $.get({
+                url: '/api/v1/user/' + userId,
+                success: (data) => {
+                    let modal = $(this)
+                    modal.find('#user-id').val(data.id)
+                    modal.find('#id').val(data.id)
+                    modal.find('#name').val(data.username)
+                    modal.find('#surname').val(data.surname)
+                    modal.find('#sex').val(data.sex)
+                    modal.find('#password').val(data.password)
+                },
+                error: (err) => {
+                    alert(err);
+                }
+            })
+        }
+    })
+    //cod for save in DB
+    $('#edit-form').click(function () {
+        let modal = $('#userEditModal')
+        let user = {
+            id: modal.find('#user-id').val(),
+            username: modal.find('#name').val(),
+            surname: modal.find('#surname').val(),
+            sex: modal.find('#sex').val(),
+            password: modal.find('#password').val(),
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/user',
+            data: JSON.stringify(user),
+            contentType: 'application/json',
+            success: function (data) {
+                console.log(data)
+                location.reload()
+            }
+        })
+        modal.modal('hide');
+    });
+    // $('#edit-form').submit(function(event) {
+    //     event.preventDefault(); // предотвращаем стандартное поведение отправки формы
+    //
+    //     var id = $('#user-id').val();
+    //     var name = $('#name').val();
+    //     var surname = $('#surname').val();
+    //     var sex = $('#sex').val();
+    //     var password = $('#password').val();
+    //     var role = $('#inputGroupSelect02').val();
+    //     console.log("Этап присвоения данных")
+    //
+    //
+    //     $.ajax({
+    //         type: 'PATCH',
+    //         url: '/admin/update',
+    //         data: JSON.stringify({
+    //             id: id,
+    //             username: name,
+    //             surname: surname,
+    //             sex: sex,
+    //             password: password,
+    //             role: role
+    //         }),
+    //         contentType: 'application/json',
+    //         success: function(response) {
+    //             // обработка успешного ответа от сервера
+    //             console.log(response);
+    //             console.log("Этап успешной отправки данных")
+    //             // закрытие модального окна после успешной отправки
+    //             $('#myModal').modal('hide');
+    //             // перезагрузка страницы или обновление данных на странице, если это необходимо
+    //             location.reload();
+    //         },
+    //         error: function(xhr, status, error) {
+    //             // обработка ошибок
+    //             console.error(error);
+    //         }
+    //     });
+    // });
+
+    //FORM for delete
+    $('#userDeleteModal').on('show.bs.modal', function (event) {
+        let button = $(event.relatedTarget)
+        let userId = button.data('userid')
+        if (userId) {
+            $.get({
+                url: '/api/v1/user/' + userId,
+                success: (data) => {
+                    let modal = $(this)
+                    modal.find('#user-id1').val(data.id)
+                    modal.find('#delete-name').val(data.username)
+                    modal.find('#delete-surname').val(data.surname)
+                    modal.find('#delete-sex').val(data.sex)
+                    modal.find('#delete-password').val(data.password)
+                    if(data.roles.length > 1) {
+                        modal.find('#delete-role').val(data.roles[0].role + ", " + data.roles[1].role)
+                    } else {
+                        modal.find('#delete-role').val(data.roles[0].role)
+
+                    }
+                },
+                error: (err) => {
+                    alert(err);
+                }
+            })
+        }
+    })
+
+
+
+</script>
 </body>
 </html>
