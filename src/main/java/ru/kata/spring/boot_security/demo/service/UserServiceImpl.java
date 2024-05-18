@@ -43,7 +43,14 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> roles = new HashSet<>();
-        roles.add(roleRepo.findRoleByRole("ROLE_ADMIN"));
+        for (Role role : user.getRoles()) {
+            Role existingRole = roleRepo.findRoleByRole(role.getRole());
+            if (existingRole != null) {
+                roles.add(existingRole);
+            } else {
+                throw new IllegalArgumentException("Role not found: " + role.getRole());
+            }
+        }
         user.setRoles(roles);
         return userRepo.save(user);
     }
@@ -55,8 +62,19 @@ public class UserServiceImpl implements UserService {
         existingUser.setUsername(user.getUsername());
         existingUser.setSurname(user.getSurname());
         existingUser.setSex(user.getSex());
-        existingUser.setRoles(user.getRoles());
-        existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            Role existingRole = roleRepo.findRoleByRole(role.getRole());
+            if (existingRole != null) {
+                roles.add(existingRole);
+            } else {
+                throw new IllegalArgumentException("Role not found: " + role.getRole());
+            }
+        }
+        existingUser.setRoles(roles);
+        if(!user.getPassword().isEmpty() && !user.getPassword().equals(existingUser.getPassword())) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
 
         return userRepo.save(existingUser);
     }

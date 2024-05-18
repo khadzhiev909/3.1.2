@@ -8,14 +8,16 @@
         html,
         body,
         .container-fluid,
-        .row,
-        .col-1,
-        .col-11 {
+        .row{
             height: 100%;
         }
 
         .col-2 {
             background-color: white;
+            padding: 0;
+        }
+        .col-2 a {
+            border-radius: 0;
         }
         body {
             background-color: #f4f4f4;
@@ -34,34 +36,40 @@
             text-decoration: none;
             color: #f4f4f4;
         }
+        .sidebar-link {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar-link.inactive {
+            background-color: white;
+            color: black;
+        }
     </style>
 </head>
 <body>
-<!--<div class="header " style="background-color: #343a40; color: #f4f4f4">-->
+<div id="wrapper">
+    <div class="header">
+        <span style="font-weight: bold;" th:text="${user.username} + ' with role:' "></span>
+        <span th:each="role : ${user.roles}" th:text="${role.role.substring(5)} + ' '"></span>
 
-<!--    <tr th:object="${user}">-->
-<!--        <td th:text="${user.username}"></td>-->
-<!--        <td th:text="${'with role: ' + rolesString}"></td>-->
-<!--    </tr>-->
-<!--    <a onclick="window.location.href='/'">LOGOUT</a>-->
-<!--</div>-->
-<div class="header">
-    <span style="font-weight: bold;" th:text="${user.username}"></span>
-    <span th:text="${'with role: ' + rolesString}"></span>
-
-    <a style="float: right;" onclick="window.location.href='/'">LOGOUT</a>
+        <a style="float: right;" onclick="window.location.href='/'">LOGOUT</a>
+    </div>
 </div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-2">
-            <a class="btn btn-primary btn-user d-block w-100 text-center"
+            <a type="button" class="sidebar-link btn btn-primary" id="user-link">User</a>
+            <a class="sidebar-link inactive" id="admin-link"
                sec:authorize="hasRole('ROLE_ADMIN')"
-               href="/admin">admin</a>
-            <a class="btn btn-primary btn-user d-block w-100 text-center"
-               style="color: white;">User</a>
-        </div>
+               href="/admin">Admin</a>
 
+        </div>
         <div class="col">
             <h1>User information-page</h1>
 
@@ -86,7 +94,7 @@
                             <td th:text="${user.username}"></td>
                             <td th:text="${user.surname}"></td>
                             <td th:text="${user.sex}"></td>
-                            <td>USER</td>
+                            <td th:text="${rolesString}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -95,65 +103,6 @@
         </div>
     </div>
 </div>
-<!--<div class="container-fluid">-->
-
-
-<!--    <div class="row">-->
-
-<!--        <div class="col-2 ">-->
-<!--            <button class="btn btn-primary btn-user">User</button>-->
-<!--        </div>-->
-
-
-
-<!--        <div class="col">-->
-<!--            <h1>User information page</h1>-->
-
-<!--            <div class="card">-->
-
-<!--                <div class="card-header">-->
-<!--                    About User-->
-<!--                </div>-->
-<!--                <div class="card-body">-->
-<!--                    <table class="table table-striped">-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th scope="col">ID</th>-->
-<!--                            <th scope="col">First Name</th>-->
-<!--                            <th scope="col">Last Name</th>-->
-<!--                            <th scope="col">Sex</th>-->
-<!--                            <th scope="col">Role</th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody>-->
-<!--                        <tr th:object="${user}">-->
-<!--                            <td th:text="${user.id}"></td>-->
-<!--                            <td th:text="${user.username}"></td>-->
-<!--                            <td th:text="${user.surname}"></td>-->
-<!--                            <td th:text="${user.sex}"></td>-->
-<!--                            <td>USER</td>-->
-
-<!--                        </tr>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
-<!--            </div>-->
-
-
-
-<!--            &lt;!&ndash;        <span sec:authorize="hasRole('ROLE_ADMIN')">&ndash;&gt;-->
-<!--            &lt;!&ndash;            only for users who has a role admin&ndash;&gt;-->
-<!--            &lt;!&ndash;        </span>&ndash;&gt;-->
-
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--<div class="header" style="background-color: #343a40; color: #f4f4f4; text-align: center;">-->
-<!--    <span style="font-weight: bold;" th:text="${user.username}"></span>-->
-<!--    <span th:text="${'with role: ' + rolesString}"></span>-->
-
-<!--    <a style="float: right;" onclick="window.location.href='/'">LOGOUT</a>-->
-<!--</div>-->
 
 
 </body>

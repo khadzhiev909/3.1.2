@@ -23,13 +23,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/addUser")
-    public String addUser(@RequestParam String userName, @RequestParam String userEmail) {
-        System.out.println(userEmail + " " + userName);
-        // Здесь вы можете добавить логику для сохранения нового пользователя в базу данных или выполнить другие действия
-        return "redirect:/admin"; // Перенаправляем пользователя обратно на страницу администратора
-    }
-
     @GetMapping("/user")
     public String getInfo(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
