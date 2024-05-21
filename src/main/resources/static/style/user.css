@@ -1,0 +1,44 @@
+html,
+body,
+.container-fluid,
+.row{
+    height: 100%;
+}
+
+.col-2 {
+    background-color: white;
+    padding: 0;
+}
+.col-2 a {
+    border-radius: 0;
+}
+body {
+    background-color: #f4f4f4;
+}
+.btn-user {
+    width: 100%;
+    margin: 0;
+}
+.header {
+    padding: 10px;
+    background-color: #343a40;
+    color: white;
+}
+
+.header a {
+    text-decoration: none;
+    color: #f4f4f4;
+}
+.sidebar-link {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar-link.inactive {
+    background-color: white;
+    color: black;
+}
