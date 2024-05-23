@@ -5,19 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
-import ru.kata.spring.boot_security.demo.validator.UserValidator;
-
 
 @RestController
-@RequestMapping("api/registration")
+@RequestMapping("api/register")
 public class RegistrationRestController {
     private final UserService userService;
-    private final UserValidator userValidator;
 
     @Autowired
-    public RegistrationRestController(UserService userService, UserValidator userValidator) {
+    public RegistrationRestController(UserService userService) {
         this.userService = userService;
-        this.userValidator = userValidator;
     }
     @PostMapping()
     public ResponseEntity<Void> performRegistration(@RequestBody User user) {

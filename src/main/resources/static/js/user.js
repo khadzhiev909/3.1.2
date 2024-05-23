@@ -1,6 +1,7 @@
 $(document).ready(function () {
+    const urlGetCurrentUser = 'http://localhost:8088/api/v1/user/current-user';
     //Заполнение заголовка с данными пользователя
-    fetch('http://localhost:8088/api/v1/user/current-user', {
+    fetch(urlGetCurrentUser, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -16,7 +17,7 @@ $(document).ready(function () {
     })
 
     //Заполнение таблицы
-    fetch('http://localhost:8088/api/v1/user/current-user', {
+    fetch(urlGetCurrentUser, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

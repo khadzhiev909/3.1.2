@@ -2,8 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     $(document).ready(function () {
+        const urlForGet = 'http://localhost:8088/api/v1/user/current-user'
         //Заполнение заголовка с данными пользователя
-        fetch('http://localhost:8088/api/v1/user/current-user', {
+        fetch(urlForGet, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -160,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
             password: $('#new-password').val(),
             roles: [{role: $('#new-role').val()}]
         });
-        const url = 'http://localhost:8088/admin/create'
+        const url = 'http://localhost:8088/api/admin'
         const headers = {
             method: 'POST',
             headers: {
