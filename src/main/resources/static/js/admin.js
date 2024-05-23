@@ -122,9 +122,9 @@ document.addEventListener('DOMContentLoaded', function () {
             roles: [{role: $('#roles').val()}] // Преобразование роли в объект
         });
         // Отправка данных на сервер методом PATCH
-        const url = '/admin/update';
+        const url = 'http://localhost:8088/api/admin';
         const headers = {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
