@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -126,160 +126,126 @@
                                     <th scope="col">Delete</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="admin-panel-tbody">
 
-<!--                                TODO: изменить заполнение таблицы на fetch api-->
-<!--                                <tr th:each="user: ${allUsers}">-->
-<!--                                    <td th:text="${user.id}"></td>-->
-<!--                                    <td th:text="${user.username}"></td>-->
-<!--                                    <td th:text="${user.surname}"></td>-->
-<!--                                    <td th:text="${user.sex}"></td>-->
-<!--                                    <td>-->
-<!--                                        <span th:each="role : ${user.roles}" th:text="${role.role.substring(5)} + ' '"></span>-->
-<!--                                    </td>-->
-                                    <td>
-<!--                                        <button-->
-<!--                                                id="edit-user"-->
-<!--                                                type="button"-->
-<!--                                                class="btn btn-info edit-btn"-->
-<!--                                                data-toggle="modal"-->
-<!--                                                data-target="#userEditModal"-->
-<!--                                                th:data-userId="${user.id}"-->
-<!--                                        >Edit-->
-<!--                                        </button>-->
-                                        <!-- Модальное окно для редактирования -->
+                                    <!-- Модальное окно для редактирования -->
 
-                                        <div class="modal fade" id="userEditModal" tabindex="-1" role="dialog"
-                                             aria-labelledby="userEditDialogLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="userEditDialogLabel">Edit</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form id="editForm" enctype="application/json">
-                                                            <input type="hidden" name="_method" value="PATCH">
-                                                            <input type="hidden" id="user-id">
-                                                            <div class="form-group">
-                                                                <div class="input-row">
-                                                                    <label for="id">ID</label>
-                                                                    <input type="text" class="form-control" name="id"
-                                                                           id="id" disabled>
-                                                                </div>
-                                                                <div class="input-row">
-                                                                    <label for="name">Name</label>
-                                                                    <input type="text" class="form-control" name="name"
-                                                                           id="name">
-                                                                </div>
-                                                                <div class="input-row">
-                                                                    <label for="surname">Surname</label>
-                                                                    <input type="text" class="form-control" name="surname"
-                                                                           id="surname">
-                                                                </div>
-                                                                <div class="input-row">
-                                                                    <label for="sex">Sex</label>
-                                                                    <input type="text" class="form-control" name="sex"
-                                                                           id="sex">
-                                                                </div>
-                                                                <div class="input-row">
-                                                                    <label for="password">password</label>
-                                                                    <input type="text" class="form-control" name="password"
-                                                                           id="password">
-                                                                </div>
-                                                                <div class="input-row">
-                                                                    <label for="roles">Role</label>
-                                                                    <select class="form-select" name="roles"
-                                                                            id="roles">
-                                                                        <option value="ROLE_USER">USER</option>
-                                                                        <option value="ROLE_ADMIN">ADMIN</option>
-                                                                    </select>
-                                                                </div>
+                                    <div class="modal fade" id="userEditModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="userEditDialogLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="userEditDialogLabel">Edit</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="editForm" enctype="application/json">
+                                                        <input type="hidden" name="_method" value="PATCH">
+                                                        <input type="hidden" id="user-id">
+                                                        <div class="form-group">
+                                                            <div class="input-row">
+                                                                <label for="id">ID</label>
+                                                                <input type="text" class="form-control" name="id"
+                                                                       id="id" disabled>
                                                             </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                        data-dismiss="modal">Close
-                                                                </button>
-                                                                <button type="submit" class="btn btn-primary"
-                                                                        id="save-user">Edit
-                                                                </button>
+                                                            <div class="input-row">
+                                                                <label for="name">Name</label>
+                                                                <input type="text" class="form-control" name="name"
+                                                                       id="name">
                                                             </div>
-                                                        </form>
-                                                    </div>
+                                                            <div class="input-row">
+                                                                <label for="surname">Surname</label>
+                                                                <input type="text" class="form-control" name="surname"
+                                                                       id="surname">
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="sex">Sex</label>
+                                                                <input type="text" class="form-control" name="sex"
+                                                                       id="sex">
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="password">password</label>
+                                                                <input type="text" class="form-control" name="password"
+                                                                       id="password">
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="roles">Role</label>
+                                                                <select class="form-select" name="roles"
+                                                                        id="roles">
+                                                                    <option value="ROLE_USER">USER</option>
+                                                                    <option value="ROLE_ADMIN">ADMIN</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Close
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary"
+                                                                    id="save-user">Edit
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Модальное окно для удаления-->
+                                    <div class="modal fade" id="userDeleteModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="userDeleteDialogLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="userDeleteDialogLabel">DELETE</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <!-- Форма для удаления, -->
+                                                <div class="modal-body">
+                                                    <form id="delete-form">
+                                                        <input type="hidden" id="user-id1">
+                                                        <div class="form-group">
+                                                            <div class="input-row">
+                                                                <label for="delete-name">Name</label>
+                                                                <input type="text" class="form-control"
+                                                                       id="delete-name"
+                                                                       disabled>
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="delete-surname">Surname</label>
+                                                                <input type="text" class="form-control"
+                                                                       id="delete-surname" disabled>
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="delete-sex">Sex</label>
+                                                                <input type="text" class="form-control"
+                                                                       id="delete-sex"
+                                                                       disabled>
+                                                            </div>
+                                                            <div class="input-row">
+                                                                <label for="roles">Role</label>
+                                                                <input type="text" class="form-control"
+                                                                       id="delete-role"
+                                                                       disabled>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <a id="delete-btn" class="btn btn-danger btn-action">Delete</a>
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>
-<!--                                        <button-->
-<!--                                                id="delete-user"-->
-<!--                                                type="button"-->
-<!--                                                class="btn btn-danger"-->
-<!--                                                data-toggle="modal"-->
-<!--                                                data-target="#userDeleteModal"-->
-<!--                                                th:data-userId="${user.id}"-->
-<!--                                        >Delete-->
-<!--                                        </button>-->
-                                        <!--Модальное окно для удаления-->
-                                        <div class="modal fade" id="userDeleteModal" tabindex="-1" role="dialog"
-                                             aria-labelledby="userDeleteDialogLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="userDeleteDialogLabel">DELETE</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <!-- Форма для удаления, -->
-                                                    <div class="modal-body">
-                                                        <form id="delete-form">
-                                                            <input type="hidden" id="user-id1">
-                                                            <div class="form-group">
-                                                                <div class="input-row">
-                                                                    <label for="delete-name">Name</label>
-                                                                    <input type="text" class="form-control"
-                                                                           id="delete-name"
-                                                                           disabled>
-                                                                </div>
-                                                                <div class="input-row">
-                                                                    <label for="delete-surname">Surname</label>
-                                                                    <input type="text" class="form-control"
-                                                                           id="delete-surname" disabled>
-                                                                </div>
-                                                                <div class="input-row">
-                                                                    <label for="delete-sex">Sex</label>
-                                                                    <input type="text" class="form-control"
-                                                                           id="delete-sex"
-                                                                           disabled>
-                                                                </div>
-                                                                <div class="input-row">
-                                                                    <label for="roles">Role</label>
-                                                                    <input type="text" class="form-control"
-                                                                           id="delete-role"
-                                                                           disabled>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                                data-dismiss="modal">Close
-                                                        </button>
-                                                        <a class="btn btn-danger btn-action"
-                                                           th:href="@{/admin/delete(id=${user.getId()})}"
-                                                           th:method="DELETE">Delete</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-<!--                                </tr>-->
+                                    </div>
                                 </tbody>
                             </table>
                         </div>

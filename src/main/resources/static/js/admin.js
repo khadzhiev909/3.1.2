@@ -28,75 +28,46 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
         .then(data => {
-            // Находим элемент <tbody>
-            const tbody = document.querySelector('tbody');
-
-            // Очищаем <tbody>, если необходимо
-            tbody.innerHTML = '';
-
-            // Проходимся по каждому пользователю из данных
+            const table = document.getElementById('admin-panel-tbody');
             data.forEach(user => {
-                // Создаем новую строку <tr>
-                const tr = document.createElement('tr');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.surname}</td>
+                    <td>${user.sex}</td>
+                    <td>${user.roles.map(role => role.role.substring(5))}</td>
+                    <td>
+                        <button
+                            id="edit-user"
+                            type="button"
+                            class="btn btn-info edit-btn"
+                            data-toggle="modal"
+                            data-target="#userEditModal"
+                            data-userId="${user.id}"
+                            >Edit
+                        </button>
+                    </td>
+                    <td>
+                        <button
+                            id="delete-user"
+                            type="button"
+                            class="btn btn-danger"
+                            data-toggle="modal"
+                            data-target="#userDeleteModal"
+                            data-userId="${user.id}"
+                        >Delete</button>
+                    </td>
+                
+                `
+                table.appendChild(row)
+            })
 
-                // Создаем и заполняем ячейки <td>
-                const idTd = document.createElement('td');
-                idTd.innerText = user.id;
-                tr.appendChild(idTd);
-
-                const nameTd = document.createElement('td');
-                nameTd.innerText = user.username;
-                tr.appendChild(nameTd);
-
-                const surnameTd = document.createElement('td');
-                surnameTd.innerText = user.surname;
-                tr.appendChild(surnameTd);
-
-                const sexTd = document.createElement('td');
-                sexTd.innerText = user.sex;
-                tr.appendChild(sexTd);
-
-                const rolesTd = document.createElement('td');
-                rolesTd.innerText = user.roles.map(role => role.role.substring(5)).join(', ');
-                tr.appendChild(rolesTd);
-
-                // Создаем ячейки для кнопок Edit и Delete
-                const editTd = document.createElement('td');
-                const deleteTd = document.createElement('td');
-
-                // Создаем кнопку Edit
-
-                const editButton = document.createElement('button');
-                editButton.id = 'edit-user';
-                editButton.type = 'button';
-                editButton.className = 'btn btn-info edit-btn';
-                editButton.setAttribute('data-toggle', 'modal');
-                editButton.setAttribute('data-target', '#userEditModal');
-                editButton.setAttribute('data-userId', user.id);
-                editButton.innerText = 'Edit';
-                editTd.appendChild(editButton);
-
-                // Создаем кнопку Delete
-                const deleteButton = document.createElement('button');
-                deleteButton.id = 'delete-user';
-                deleteButton.type = 'button';
-                deleteButton.className = 'btn btn-danger';
-                deleteButton.setAttribute('data-toggle', 'modal');
-                deleteButton.setAttribute('data-target', '#userDeleteModal');
-                deleteButton.setAttribute('data-userId', user.id);
-                deleteButton.innerText = 'Delete';
-                deleteTd.appendChild(deleteButton);
-
-                // Добавляем ячейки с кнопками в строку
-                tr.appendChild(editTd);
-                tr.appendChild(deleteTd);
-
-                // Добавляем строку <tr> в <tbody>
-                tbody.appendChild(tr);
-            });
         })
-        .catch(error => console.error(error));
 
+
+
+        //заполнение модального окна для редактирования
         $('#userEditModal').on('show.bs.modal', function (event) {
             let button = $(event.relatedTarget);
             let userId = button.data('userid');
@@ -135,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     });
 
-// Обработчик события отправки формы
+    // Обработчик события отправки формы
     $('#editForm').submit(function (event) {
         // Отмена стандартного поведения формы
         event.preventDefault();
@@ -172,13 +143,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('#edit-user').click((event) => {
-
        const modal = document.getElementById("userEditModal")
         modal.style.display = "block";
        modal.className = "modal fade show";
 
     })
 
+    //отправка формы для создания
     $('#new-user-form').submit(function (event) {
         event.preventDefault();
 
@@ -207,19 +178,19 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error("Error:", error))
     });
 
-//FORM for delete
+    //FORM for delete
     $('#userDeleteModal').on('show.bs.modal', function (event) {
         let button = $(event.relatedTarget)
         let userId = button.data('userid')
         if (userId) {
-            const url = 'http://localhost:8088/api/v1/user/' + userId
+            const urlForEdit = 'http://localhost:8088/api/v1/user/' + userId
             const headers = {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-            fetch(url, headers)
+            fetch(urlForEdit, headers)
                 .then(response => {
                     if (!response.ok) {
                         alert("Error: " + response.status + " " + response.statusText);
@@ -239,6 +210,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 .catch(error => {
                     console.error('Error:', error);
                 });
+            $("#delete-btn").click(event => {
+                const url = 'http://localhost:8088/api/admin/' + userId;
+                const headers = {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                fetch(url, headers)
+                    .then(response => {
+                        if (response.ok) {
+                            $('#userDeleteModal').modal('hide');
+                            // Перезагрузка страницы или выполнение других действий
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            })
         }
     })
 })
