@@ -38,20 +38,47 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
         userRepo.save(user);
     }
+    @Override
+    @Transactional
+    public User save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            Role existingRole = roleRepo.findRoleByRole(role.getRole());
+            if (existingRole != null) {
+                roles.add(existingRole);
+            } else {
+                throw new IllegalArgumentException("Role not found: " + role.getRole());
+            }
+        }
+        user.setRoles(roles);
+        return userRepo.save(user);
+    }
 
     @Override
     @Transactional
-    public void update(int id, User user) {
-        User existingUser = userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+    public User update(User user) {
+        User existingUser = userRepo.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + user.getId()));
         existingUser.setUsername(user.getUsername());
         existingUser.setSurname(user.getSurname());
         existingUser.setSex(user.getSex());
-        existingUser.setRoles(user.getRoles());
+
+        Set<Role> roles = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            Role existingRole = roleRepo.findRoleByRole(role.getRole());
+            if (existingRole != null) {
+                roles.add(existingRole);
+            } else {
+                throw new IllegalArgumentException("Role not found: " + role.getRole());
+            }
+        }
+        existingUser.setRoles(roles);
+
         if(!user.getPassword().isEmpty() && !user.getPassword().equals(existingUser.getPassword())) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        userRepo.save(existingUser);
+        return userRepo.save(existingUser);
     }
 
     @Override
