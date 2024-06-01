@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setUsername(user.getUsername());
         existingUser.setSurname(user.getSurname());
         existingUser.setSex(user.getSex());
+
         Set<Role> roles = new HashSet<>();
         for (Role role : user.getRoles()) {
             Role existingRole = roleRepo.findRoleByRole(role.getRole());
@@ -72,6 +73,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         existingUser.setRoles(roles);
+
         if(!user.getPassword().isEmpty() && !user.getPassword().equals(existingUser.getPassword())) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
