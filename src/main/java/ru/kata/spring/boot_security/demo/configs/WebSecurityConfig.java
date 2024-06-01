@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()//запрашивается авторизация для определенных url - здесь даем разрешение конкретным ролям
-                .antMatchers("/", "/index", "/register").permitAll()
+                .antMatchers("/", "/index", "/api/register", "/login", "/register").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()

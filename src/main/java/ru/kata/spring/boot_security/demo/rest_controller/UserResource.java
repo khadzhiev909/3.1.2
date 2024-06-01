@@ -1,10 +1,12 @@
-package ru.kata.spring.boot_security.demo.controller;
+package ru.kata.spring.boot_security.demo.rest_controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.MyUserDetails;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
-import ru.kata.spring.boot_security.demo.validator.UserValidator;
 
 
 @RestController
@@ -23,4 +25,9 @@ public class UserResource {
         return userService.findById(userId);
     }
 
+    @GetMapping("/current-user")
+    public ResponseEntity<MyUserDetails> getCurrentUser(Authentication authentication) {
+        MyUserDetails user = (MyUserDetails) authentication.getPrincipal();
+        return ResponseEntity.ok(user);
+    }
 }

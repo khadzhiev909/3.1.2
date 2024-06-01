@@ -1,102 +1,153 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>registration</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      color: #343a40;
-      margin: 0;
-      padding: 0;
-    }
-    .container-fluid {
-      padding-top: 50px;
-      background-color: #f8f9fa;
-    }
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 40px;
-      color: #007bff;
-    }
-    form {
-      padding: 20px;
-      border-radius: 10px;
-      background-color: #f1f1f1;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-    label {
-      font-weight: bold;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ced4da;
-      border-radius: 5px;
-    }
-    input[type="submit"] {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      background-color: #007bff;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    input[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-    .btn-back {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #dc3545;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      text-decoration: none;
-      text-align: center;
-    }
-    .btn-back:hover {
-      background-color: #c82333;
-    }
-  </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-fluid {
+            padding-top: 50px;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #007bff;
+        }
+
+        form {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f1f1f1;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-back {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #dc3545;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-back:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 
 <body>
 <div class="container-fluid">
-  <div class="container">
-    <h1>Save user</h1>
-    <form th:method="POST" th:action="@{/register}" th:object="${user}">
-      <div>
-        <label for="name">Введите имя пользователя</label>
-        <input type="text" th:field="*{username}" id="name">
-        <label for="surname">Введите фамилию</label>
-        <input type="text" th:field="*{surname}" id="surname">
-        <label for="sex">Введите пол</label>
-        <input type="text" th:field="*{sex}" id="sex">
-        <label for="password">Введите пароль</label>
-        <input type="text" th:field="*{password}" id="password">
+    <div class="container">
+        <h1>Save user</h1>
+        <form id="form-registration">
+            <div>
+                <label for="username">Введите имя пользователя</label>
+                <input type="text" id="username">
+                <label for="surname">Введите фамилию</label>
+                <input type="text" id="surname">
+                <label for="sex">Введите пол</label>
+                <input type="text" id="sex">
+                <label for="password">Введите пароль</label>
+                <input type="text" id="password">
 
-        <input type="submit" value="SAVE" id="save">
-      </div>
-    </form>
-    <a href="javascript:history.back()" class="btn-back">Back</a>
-  </div>
+                <input type="submit" value="SAVE" id="save">
+            </div>
+        </form>
+        <a href="javascript:history.back()" class="btn-back">Back</a>
+    </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#form-registration").submit(function (event) {
+            event.preventDefault();
+
+            var user = JSON.stringify({
+                username: $("#username").val(),
+                surname: $("#surname").val(),
+                sex: $("#sex").val(),
+                password: $("#password").val()
+            });
+
+            const urlForRegister = 'http://localhost:8088/api/register';
+            const headers = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: user
+            }
+            console.log(user)
+            fetch(urlForRegister, headers)
+                .then((response) => {
+                    if (response.ok) {
+                        window.location.href = 'http://localhost:8088/login';
+                    } else {
+                        alert('Error');
+                    }
+                })
+        })
+    })
+</script>
 </body>
 </html>
