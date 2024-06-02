@@ -1,7 +1,5 @@
 # Spring Boot Security Demo
 
-![Spring Boot Logo](https://spring.io/images/spring-logo.svg)
-
 ## Описание проекта
 
 **Spring Boot Security Demo** - это демонстрационное приложение на основе Spring Boot, созданное для демонстрации аутентификации и авторизации пользователей, а также для управления пользователями через административную панель. 
