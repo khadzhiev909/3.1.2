@@ -45,6 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and()
+                .httpBasic()  // Включение базовой аутентификации
+                .and()
                 .formLogin().successHandler(successUserHandler)
                 .permitAll()
                 .and()
