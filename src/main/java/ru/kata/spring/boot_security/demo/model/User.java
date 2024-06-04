@@ -39,6 +39,12 @@ public class User{
         this.surname = surname;
         this.sex = sex;
     }
+    public User(int id,String username, String surname, String sex) {
+        this.id = id;
+        this.username = username;
+        this.surname = surname;
+        this.sex = sex;
+    }
 
     public User() {
 

@@ -43,6 +43,11 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Set<Role> roles = new HashSet<>();
+        saveRole(roles, user);
+        return userRepo.save(user);
+    }
+
+    private void saveRole(Set<Role> roles, User user) {
         for (Role role : user.getRoles()) {
             Role existingRole = roleRepo.findRoleByRole(role.getRole());
             if (existingRole != null) {
@@ -52,7 +57,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         user.setRoles(roles);
-        return userRepo.save(user);
     }
 
     @Override
@@ -63,15 +67,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setSurname(user.getSurname());
         existingUser.setSex(user.getSex());
         Set<Role> roles = new HashSet<>();
-        for (Role role : user.getRoles()) {
-            Role existingRole = roleRepo.findRoleByRole(role.getRole());
-            if (existingRole != null) {
-                roles.add(existingRole);
-            } else {
-                throw new IllegalArgumentException("Role not found: " + role.getRole());
-            }
-        }
-        existingUser.setRoles(roles);
+        saveRole(roles, existingUser);
         if(!user.getPassword().isEmpty() && !user.getPassword().equals(existingUser.getPassword())) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -97,7 +93,4 @@ public class UserServiceImpl implements UserService {
         return userRepo.findAll();
     }
 
-    public List<Role> getAllRoles() {
-        return roleRepo.findAll();
-    }
 }
